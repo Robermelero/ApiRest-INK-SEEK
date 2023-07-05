@@ -43,7 +43,7 @@ const postLogin  = async (request,response) =>
         let params = [request.body.email,
                 request.body.password];
 
-        let res = await connection.query (sql, params);
+        let res = await Pool.query (sql, params);
         if (res[0].length > 0){
             respuesta = {
             error:false,
