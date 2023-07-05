@@ -1,6 +1,6 @@
 const mysql = require("mysql2/promise");
 
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
   host: process.env.DB_HOST || "ink-seek.c9xn6kahrfek.eu-west-3.rds.amazonaws.com",
   user: process.env.DB_HOST || "admin",
   password: process.env.DB_PASSWORD || "administrador",
