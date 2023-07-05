@@ -33,4 +33,36 @@ const postRegister = async (request, response) => {
   }
 };
 
-module.exports = { postRegister };
+const postLogin  = async (request,response) =>
+{
+    try 
+    {
+        
+        let respuesta;
+        let sql = "SELECT * FROM user WHERE email = ? AND password = ?";
+        let params = [request.body.email,
+                request.body.password];
+
+        let res = await connection.query (sql, params);
+        if (res[0].length > 0){
+            respuesta = {
+            error:false,
+            codigo:200,
+            mensaje:"Los datos son correctos",
+            data_user: res[0]};
+        }else{
+            respuesta = {
+            error:true,
+            codigo:200,
+            mensaje:"Los datos son incorrectos",
+            data_user: null};
+        }
+        response.send(respuesta)
+      }
+        catch (err)
+        {
+            console.log(err)
+        }
+      }
+
+module.exports = { postRegister, postLogin };
