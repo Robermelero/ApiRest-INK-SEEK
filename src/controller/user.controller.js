@@ -68,8 +68,8 @@ const postLogin  = async (request,response) =>
   /////EDITAR PERFIL////
   const editProfile = async (request, response) => {
     try {
-      let sql = "UPDATE user SET name = ?, last_name = ?, email = ?, password = ? WHERE id_user = ?";
-      let params = [request.body.name, request.body.last_name, request.body.email, request.body.password, request.body.id_user];
+      let sql = "UPDATE user SET name = ?, last_name = ?, email = ?, password = ?, nickname = ?, style = ?, studio = ?, descripcion = ?  WHERE id_user = ?";
+      let params = [request.body.name, request.body.last_name, request.body.email, request.body.password, request.body.nickname, request.body.style, request.body.studio, request.body.descripcion, request.body.id_user];
       let res = await Pool.query(sql, params);
       console.log(res)
       response.json({
@@ -81,11 +81,35 @@ const postLogin  = async (request,response) =>
       response.status(500).json({
         error: true,
         message: "Ocurrió un error al actualizar el perfil"
-      });
+      })
     }
   }
   
-
+  // const editProfileTatuador = async (request, response) => {
+  //   try {
+  //     let sql = "UPDATE user SET name = ?, last_name = ?, email = ?, id_photo = ?, password = ?, nickname = ?, style = ?, studio = ?, descripcion = ? WHERE id_user = ?";
+  //     let params = [request.body.name, request.body.last_name, request.body.email, request.body.id_photo, request.body.id_user, request.body.password, request.body.nickname, request.body.style, request.body.studio, request.body.descripcion];
+  //     let res = await Pool.query (sql, params);
+  //     if (res[0].length > 0){
+  //         respuesta = {
+  //         error:false,
+  //         codigo:200,
+  //         mensaje:"Los datos son correctos",
+  //         data_user: res[0]};
+  //     }else{
+  //         respuesta = {
+  //         error:true,
+  //         codigo:200,
+  //         mensaje:"Los datos son incorrectos",
+  //         data_user: null};
+  //     }
+  //     response.send(respuesta)
+  //   }
+  //   catch (err)
+  //   {
+  //         console.log(err)
+  //   }
+  // }
   
 
 module.exports = { postRegister, postLogin, editProfile };
