@@ -5,7 +5,7 @@ const postEvent=async(req,res)=>{
     const {photo,title,date,place}=req.body; 
     console.log("entrando");
     try{
-        await Pool.query("INSERT INTO evento(photo,title,date,locate,id_user) VALUES (?,?,?,?,?) ",[photo,title,date,place,id_user])
+        await Pool.query("INSERT INTO evento(photo,title,date,place,id_user) VALUES (?,?,?,?,?) ",[photo,title,date,place,id_user])
        respuesta={error:false, 
         codigo:200, mensaje:
         "Evento añadido"}
@@ -45,14 +45,19 @@ const deleteEvent = async (req, res) => {
 
   const getEvents = async (req, res) => {
     try {
-      const events = await Pool.query('SELECT * FROM evento');
+      console.log("entrando");
+      const eventos = await Pool.query('SELECT * FROM evento');
+      console.log("toma tus eventos",eventos);
   
       const respuesta = {
         error: false,
         codigo: 200,
         mensaje: 'Eventos obtenidos',
-        eventos: events,
+        eventos: eventos,
+        
       };
+      console.log("respueta",respuesta);
+
       res.send(respuesta);
     } catch (error) {
       const respuesta = {
@@ -63,6 +68,7 @@ const deleteEvent = async (req, res) => {
       };
       console.log(error);
       res.send(respuesta);
+      console.log("error");
     }
   };
 
@@ -70,7 +76,7 @@ const deleteEvent = async (req, res) => {
     const { search } = req.query;
   
     try {
-      const events = await Pool.query(
+      const eventos = await Pool.query(
         `SELECT * FROM evento
         INNER JOIN user ON evento.id_user = user.id_user
         WHERE evento.title LIKE ? OR user.name LIKE ?`,
@@ -82,7 +88,7 @@ const deleteEvent = async (req, res) => {
         codigo: 200,
   
         mensaje: 'Eventos encontrados',
-        eventos: events,
+        eventos: eventos,
       };
       res.send(respuesta);
     } catch (error) {
