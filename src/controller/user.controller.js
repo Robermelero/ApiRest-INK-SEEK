@@ -80,6 +80,54 @@ const postLogin  = async (request,response) =>
           res.status(500).json({ error: 'Error al obtener el ID del usuario' });
         }
       };
+        /////EDITAR PERFIL////
+  const editProfile = async (request, response) => {
+    try {
+      let sql = "UPDATE user SET name = ?, last_name = ?, email = ?, password = ?, nickname = ?, style = ?, studio = ?, descripcion = ?  WHERE id_user = ?";
+      let params = [request.body.name, request.body.last_name, request.body.email, request.body.password, request.body.nickname, request.body.style, request.body.studio, request.body.descripcion, request.body.id_user];
+      let res = await Pool.query(sql, params);
+      console.log(res)
+      response.json({
+        error: false,
+        message: "Perfil actualizado correctamente"
+      });
+    } catch (error) {
+      console.log(error);
+      response.status(500).json({
+        error: true,
+        message: "Ocurrió un error al actualizar el perfil"
+      })
+    }
+  }
+  
+//GET TATUADORES DEL EXPLORA
+const getTatuadoresExplora = async (request, response) => {
+  try {
+    let respuesta;
+    let sql = "SELECT * FROM user WHERE is_Tatuador = 1";
+    // let params = [request.params.is_Tatuador]
+    let res = await Pool.query(sql);
+
+    if (res[0].length > 0){
+      respuesta = {
+        error: false,
+        codigo: 200,
+        mensaje: "Artistas disponibles",
+        data_artistas: res[0]};
+    }else{
+      respuesta = {
+        error: false,
+        codigo: 200,
+        mensaje: "Artistas disponibles",
+        data_artistas: null};
+    }
+    response.send(respuesta)
+    console.log(res[0])
+  }
+  catch(err){
+    console.log(err)
+  }
+}
      
       
       
@@ -89,4 +137,4 @@ const postLogin  = async (request,response) =>
       
       
 
-module.exports = { postRegister, postLogin, obtenerIdUsuario };
+module.exports = { postRegister, postLogin, obtenerIdUsuario, editProfile, getTatuadoresExplora };
