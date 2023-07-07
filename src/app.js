@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(userRouters);
 app.use(tiendaRouters);
 app.use(eventRoutes);
-app.use(followRouters)
+app.use(followRouters);
 app.use(function(req, res, next)
 {
     res.status(404).json({error: true,
