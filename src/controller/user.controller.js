@@ -64,5 +64,29 @@ const postLogin  = async (request,response) =>
             console.log(err)
         }
       }
+      const obtenerIdUsuario = async (req, res) => {
+        try {
+          const email = req.params.email;
+          const sql = 'SELECT id_user FROM user WHERE email = ?';
+          const [result] = await Pool.query(sql, [email]);
+          if (result.length > 0) {
+            const idUsuario = result[0].id_user;
+            res.status(200).json(idUsuario);
+          } else {
+            res.status(404).json({ error: 'Usuario no encontrado' });
+          }
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ error: 'Error al obtener el ID del usuario' });
+        }
+      };
+     
+      
+      
+      
+      
+      
+      
+      
 
-module.exports = { postRegister, postLogin };
+module.exports = { postRegister, postLogin, obtenerIdUsuario };
