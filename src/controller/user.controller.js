@@ -65,4 +65,66 @@ const postLogin  = async (request,response) =>
         }
       }
 
-module.exports = { postRegister, postLogin };
+
+      const getTatuadoresExplora = async (request, response) => {
+  try {
+    let respuesta;
+    let sql = "SELECT * FROM user WHERE is_Tatuador = 1";
+    // let params = [request.params.is_Tatuador]
+    let res = await Pool.query(sql);
+
+    if (res[0].length > 0){
+      respuesta = {
+        error: false,
+        codigo: 200,
+        mensaje: "Artistas disponibles",
+        data_artistas: res[0]};
+    }else{
+      respuesta = {
+        error: false,
+        codigo: 200,
+        mensaje: "Artistas disponibles",
+        data_artistas: null};
+    }
+    response.send(respuesta)
+    console.log(res[0])
+  }
+  catch(err){
+    console.log(err)
+  }
+      }
+
+  const getTatuador = async (request,response) => 
+  {
+      try
+      {
+       
+          let respuesta;
+          let sql = "SELECT * FROM user  WHERE nickname = ? OR style = ? OR studio =? ";
+          let params = [request.query.nickname,
+                        request.query.style,
+                        request.query.studio];
+          let res = await Pool.query(sql,params);
+          
+          if (res[0].length > 0){
+              respuesta = {
+              error:false,
+              codigo:200,
+              mensaje:"Tatuadores encontrados",
+              data: res[0]};
+          }else{
+              respuesta = {
+              error:true,
+              codigo:200,
+              mensaje:"no hay tatuadores",
+              data: null};
+          }
+          response.send(respuesta)
+      }
+      catch(err)
+      {
+          console.log(err);
+      }
+  }  
+
+module.exports = { postRegister, postLogin, getTatuadoresExplora, getTatuador };
