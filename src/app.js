@@ -4,6 +4,7 @@ const errorHandling = require("./error/errorHandling");
 const userRouters = require("./routers/user.routers");
 const tiendaRouters = require("./routers/tienda.routers")
 const eventRoutes=require("./routers/event.routers")
+const homeRouters=require("./routers/home.routers")
 
 
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(userRouters);
 app.use(tiendaRouters);
 app.use(eventRoutes);
+app.use(homeRouters);
 app.use(function(req, res, next)
 {
     res.status(404).json({error: true,
