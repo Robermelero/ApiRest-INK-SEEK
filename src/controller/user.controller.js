@@ -39,7 +39,8 @@ const postLogin  = async (request,response) =>
     {
         
         let respuesta;
-        let sql = "SELECT * FROM user WHERE email = ? AND password = ?";
+        // let sql = "SELECT * FROM user WHERE email = ? AND password = ?";
+        let sql = `SELECT * FROM user JOIN photo ON (user.id_user = photo.id_user) WHERE email = ? AND password = ? AND es_publicacion = 0`
         let params = [request.body.email,
                 request.body.password];
         let res = await Pool.query (sql, params);
@@ -137,4 +138,33 @@ const getTatuadoresExplora = async (request, response) => {
       
       
 
-module.exports = { postRegister, postLogin, obtenerIdUsuario, editProfile, getTatuadoresExplora };
+
+      const getUserTatuadorInfo = async (request, response) => {
+        console.log("hahaha");
+        try {
+          let params = [request.params.id_user];
+          let respuesta;
+          let sql = "SELECT * FROM photo WHERE id_user = ? AND es_publicacion = 1";
+      
+          console.log(sql, params);
+      
+          let [result] = await Pool.query(sql, params);
+          console.log(result);
+      
+          respuesta = {
+            error: false,
+            codigo: 200,
+            mensaje: 'funciona',
+            data_foto: result
+          };
+
+          response.send(respuesta)
+
+        } catch (err) {
+          console.log(err);
+        }
+
+       
+      };
+
+module.exports = { postRegister, postLogin, obtenerIdUsuario, editProfile, getTatuadoresExplora, getUserTatuadorInfo };

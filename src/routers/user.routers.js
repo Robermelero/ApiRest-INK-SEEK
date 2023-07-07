@@ -6,6 +6,7 @@ router.post("/registro", userCtrl.postRegister);
 router.post("/login",userCtrl.postLogin);
 router.put("/edit-profile-tatuador", userCtrl.editProfile);
 router.get("/descubrir-artista", userCtrl.getTatuadoresExplora)
+router.get('/profile-tatuador-propia/:id_user', userCtrl.getUserTatuadorInfo)
 
 router.get('/user/:email', userCtrl.obtenerIdUsuario);
 
