@@ -8,6 +8,7 @@ const homeRouters=require("./routers/home.routers")
 
 
 
+const citaRouters = require("./routers/cita.routers");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(userRouters);
 app.use(tiendaRouters);
 app.use(eventRoutes);
 app.use(homeRouters);
+app.use(citaRouters);
 app.use(function(req, res, next)
 {
     res.status(404).json({error: true,
