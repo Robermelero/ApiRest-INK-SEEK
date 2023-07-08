@@ -21,8 +21,6 @@ const postRegister = async (request, response) => {
 
     let [result] = await connection.query(sql, params);
     console.log(result);
-
-
     connection.release();
 
     if (result.insertId) response.send(String(result.insertId));
