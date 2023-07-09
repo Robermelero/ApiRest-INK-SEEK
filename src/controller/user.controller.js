@@ -98,7 +98,6 @@ const postLogin  = async (request,response) =>
   {
       try
       {
-       
           let respuesta;
           let sql = "SELECT * FROM user  WHERE nickname = ? OR style = ? OR studio =? ";
           let params = [request.query.nickname,
@@ -120,6 +119,7 @@ const postLogin  = async (request,response) =>
               data: null};
           }
           response.send(respuesta)
+          console.log(res[0])
       }
       catch(err)
       {

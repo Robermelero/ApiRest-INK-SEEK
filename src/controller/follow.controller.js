@@ -3,15 +3,15 @@ const { Pool } = require("../database");
 const postFollow = async (req, res) => {
     console.log("prueba follow")
   try {
-    let  id_user  = req.params.id;
+    let  id_user  = req.params.id_user;
     console.log(req.param.id)
-    let id_follower = req.body.id;
+    let id_follower = req.params.id_follower;
     console.log("el que sigue")
-    console.log(req.user.id)
+    console.log(id_follower)
 
     let respuesta;
 
-    let sqlCheck = "SELECT * FROM follows WHERE id_user = ? AND id_follower = ?";
+    let sqlCheck = "SELECT * FROM follow WHERE id_user = ? AND id_follower = ?";
     let paramsCheck = [id_user, id_follower];
 
     let resCheck = await Pool.query(sqlCheck, paramsCheck);
@@ -25,7 +25,7 @@ const postFollow = async (req, res) => {
         data: null
       };
     } else {
-        let sqlInsert = "INSERT INTO follows (id_user, id_follower) VALUES (?, ?)";
+        let sqlInsert = "INSERT INTO follow (id_user, id_follower) VALUES (?, ?)";
         let paramsInsert = [id_user, id_follower];
         console.log("cucu2",paramsInsert)
       await Pool.query(sqlInsert, paramsInsert);
@@ -46,12 +46,12 @@ const postFollow = async (req, res) => {
 
 const postUnfollow = async (req, res) => {
   try {
-    let { id_user } = req.params;
-    let id_follower = req.user.id;
+    let  id_user  = req.params.id_user;
+    let id_follower = req.params.id_follower;
 
     let respuesta;
 
-    let sqlCheck = "SELECT * FROM follows WHERE id_user = ? AND id_follower = ?";
+    let sqlCheck = "SELECT * FROM follow WHERE id_user = ? AND id_follower = ?";
     let paramsCheck = [id_user, id_follower];
 
     let resCheck = await Pool.query(sqlCheck, paramsCheck);
@@ -64,7 +64,7 @@ const postUnfollow = async (req, res) => {
         data: null
       };
     } else {
-        let sqlDelete = "DELETE FROM follows WHERE id_user = ? AND id_follower = ?";
+        let sqlDelete = "DELETE FROM follow WHERE id_user = ? AND id_follower = ?";
         let paramsDelete = [id_user, id_follower];
 
       await Pool.query(sqlDelete, paramsDelete);
