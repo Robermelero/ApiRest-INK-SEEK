@@ -5,23 +5,20 @@ const postRegister = async (request, response) => {
     console.log(request.body);
     let params = [];
     let sql =
-      "INSERT INTO user (name, last_name, email, password, is_Tatuador) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO user (name, last_name, email, password, id_photo, is_Tatuador) VALUES (?, ?, ?, ?, ?, ?)";
     params = [
       request.body.name,
       request.body.last_name,
       request.body.email,
       request.body.password,
+      101,
       request.body.is_Tatuador ? 1 : 0,
     ];
 
-
- 
     const connection = await Pool.getConnection();
     
-
     let [result] = await connection.query(sql, params);
     console.log(result);
-
 
     connection.release();
 
@@ -129,16 +126,7 @@ const getTatuadoresExplora = async (request, response) => {
     console.log(err)
   }
 }
-     
-      
-      
-      
-      
-      
-      
-      
-
-
+  
       const getUserTatuadorInfo = async (request, response) => {
         console.log("hahaha");
         try {

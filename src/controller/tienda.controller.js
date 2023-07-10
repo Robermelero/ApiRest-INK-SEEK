@@ -7,7 +7,6 @@ const getProducto = async (req, res)=>{
         let sql = "SELECT name, photo, photo.id_photo, producto.id_producto FROM producto JOIN photo ON(producto.id_photo = photo.id_photo) WHERE photo.id_user = ?";
          params =[
             req.params.id_user,
-            // req.params.id_producto
         ]
         
         console.log(sql);
