@@ -125,6 +125,7 @@ const postLogin  = async (request,response) =>
       {
           console.log(err);
       }
-  }  
+  }
+  
 
-module.exports = { postRegister, postLogin, getTatuadoresExplora, getTatuador };
+module.exports = { postRegister, postLogin, getTatuadoresExplora, getTatuador};
