@@ -2,9 +2,9 @@ const express = require("express");
 const cors = require('cors');
 const errorHandling = require("./error/errorHandling");
 const userRouters = require("./routers/user.routers");
-const tiendaRouters = require("./routers/tienda.routers")
-const eventRoutes=require("./routers/event.routers")
-
+const tiendaRouters = require("./routers/tienda.routers");
+const eventRoutes=require("./routers/event.routers");
+const chatRouters = require("./routers/chat.routers");
 
 
 
@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(userRouters);
 app.use(tiendaRouters);
 app.use(eventRoutes);
+app.use(chatRouters)
 app.use(function(req, res, next)
 {
     res.status(404).json({error: true,
