@@ -2,7 +2,10 @@ const {Router} = require ("express");
 const router = Router();
 const homeController = require("../controller/home.Controller");
 
-router.get(`/user/:id_follower/following/:id_user/photos`, homeController.homeGetPhotos)
-router.get(`/user/:id_user1/search`,homeController.homeSearch)
+router.get(`/home/photos/:id_follower`, homeController.homeGetPhotos)
+router.get(`/home/search/:id_user1`,homeController.homeSearch)
+router.get(`/home/followed_users/:id_user`,homeController.getFollowedUsers)
+
 
 module.exports=router
+
