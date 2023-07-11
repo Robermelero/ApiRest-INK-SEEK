@@ -3,7 +3,6 @@ const { Pool } = require("../database");
 const postEvent=async(req,res)=>{
     const id_user=req.params.id_user;
     const {photo,title,fecha_inicio,fecha_final,place}=req.body; 
-    console.log("entrando");
     try{
        const imagen= await Pool.query(`
         INSERT INTO photo (photo, id_user)
@@ -38,7 +37,6 @@ const deleteEvent = async (req, res) => {
       SELECT * FROM evento
       WHERE id_evento=?`,[id_evento])
       const id_photo=IdDeLaMaravillosaTablaFotos.id_photo;
-      console.log("QUE ME DAS TU?",IdDeLaMaravillosaTablaFotos.id_photo);
       await Pool.query('DELETE FROM evento WHERE id_evento = ?', [id_evento]);
       await Pool.query('DELETE FROM photo WHERE id_photo = ?', [id_photo]);
       const respuesta = {
@@ -62,12 +60,10 @@ const deleteEvent = async (req, res) => {
 
   const getEvents = async (req, res) => {
     try {
-      console.log("entrando");
       const eventos = await Pool.query(`
       SELECT evento.*, photo.photo As photo FROM evento 
       LEFT JOIN photo ON evento.Id_photo=photo.id_photo`);
       
-      console.log("toma tus eventos",eventos[0]);
   
       const respuesta = {
         error: false,
@@ -76,7 +72,6 @@ const deleteEvent = async (req, res) => {
         eventos: eventos,
         
       };
-      console.log("respueta",respuesta);
 
       res.send(respuesta);
     } catch (error) {
