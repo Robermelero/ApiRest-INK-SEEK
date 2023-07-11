@@ -2,13 +2,11 @@ const express = require("express");
 const cors = require('cors');
 const errorHandling = require("./error/errorHandling");
 const userRouters = require("./routers/user.routers");
-const tiendaRouters = require("./routers/tienda.routers")
-const eventRoutes=require("./routers/event.routers")
+const tiendaRouters = require("./routers/tienda.routers");
+const eventRoutes=require("./routers/event.routers");
+const chatRouters = require("./routers/chat.routers");
 const homeRouters=require("./routers/home.routers")
 const followRouters = require("./routers/follow.routers");
-
-
-
 const citaRouters = require("./routers/cita.routers");
 
 const app = express();
@@ -24,6 +22,7 @@ app.use(eventRoutes);
 app.use(homeRouters);
 app.use(citaRouters);
 app.use(followRouters);
+app.use(chatRouters);
 app.use(function(req, res, next)
 {
     res.status(404).json({error: true,
