@@ -96,7 +96,7 @@ const postLogin  = async (request,response) =>
           res.status(500).json({ error: 'Error al obtener el ID del usuario' });
         }
       };
-        /////EDITAR PERFIL////
+  /////EDITAR PERFIL////
   const editProfile = async (request, response) => {
     try {
       let sql = `
