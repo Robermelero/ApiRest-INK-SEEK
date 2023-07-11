@@ -5,6 +5,7 @@ const userRouters = require("./routers/user.routers");
 const tiendaRouters = require("./routers/tienda.routers")
 const eventRoutes=require("./routers/event.routers")
 const homeRouters=require("./routers/home.routers")
+const followRouters = require("./routers/follow.routers");
 
 
 
@@ -22,6 +23,7 @@ app.use(tiendaRouters);
 app.use(eventRoutes);
 app.use(homeRouters);
 app.use(citaRouters);
+app.use(followRouters);
 app.use(function(req, res, next)
 {
     res.status(404).json({error: true,

@@ -84,8 +84,18 @@ const postLogin  = async (request,response) =>
         /////EDITAR PERFIL////
   const editProfile = async (request, response) => {
     try {
-      let sql = "UPDATE user SET name = ?, last_name = ?, email = ?, password = ?, nickname = ?, style = ?, studio = ?, descripcion = ?  WHERE id_user = ?";
-      let params = [request.body.name, request.body.last_name, request.body.email, request.body.password, request.body.nickname, request.body.style, request.body.studio, request.body.descripcion, request.body.id_user];
+      let sql = `
+      UPDATE user
+      INNER JOIN photo ON user.id_photo = photo.id_photo
+      SET user.name = ?, user.last_name = ?, user.email = ?, user.password = ?, user.nickname = ?, user.style = ?, user.studio = ?, user.descripcion = ?, photo.photo = ?
+      WHERE user.id_user = ?`;
+    
+    let params = [
+      request.body.name, request.body.last_name, request.body.email, request.body.password, 
+      request.body.nickname, request.body.style, request.body.studio, request.body.descripcion, 
+      request.body.photo, request.body.id_user
+    ];
+
       let res = await Pool.query(sql, params);
       console.log(res)
       response.json({
@@ -105,7 +115,11 @@ const postLogin  = async (request,response) =>
 const getTatuadoresExplora = async (request, response) => {
   try {
     let respuesta;
-    let sql = "SELECT * FROM user WHERE is_Tatuador = 1";
+    let sql = `
+      SELECT user.*, photo.photo
+      FROM user
+      INNER JOIN photo ON user.id_photo = photo.id_photo
+      WHERE user.is_Tatuador = 1`;
     // let params = [request.params.is_Tatuador]
     let res = await Pool.query(sql);
 
@@ -130,18 +144,46 @@ const getTatuadoresExplora = async (request, response) => {
   }
 }   
 
+
+const getArtistaInfo = async (request,response) => {
+  try {
+    let params = [request.params.id_user];
+    let sql = `
+      SELECT user.*, photo.photo
+      FROM user
+      INNER JOIN photo ON user.id_photo = photo.id_photo
+      WHERE user.id_user = ?`;
+
+      let res = await Pool.query (sql, params);
+    
+      if (res[0].length > 0){
+          respuesta = {
+          error:false,
+          codigo:200,
+          mensaje:"Los datos son correctos",
+          data_user: res[0]};
+      }else{
+          respuesta = {
+          error:true,
+          codigo:200,
+          mensaje:"Los datos son incorrectos",
+          data_user: null};
+      }
+      response.send(respuesta)
+    }
+      catch (err)
+      {
+          console.log(err)
+      }
+}
+
 //VISTA PERFIL PROPIA
 const getUserTatuadorInfo = async (request, response) => {
-  console.log("hahaha");
   try {
     let params = [request.params.id_user];
     let respuesta;
     let sql = "SELECT * FROM photo WHERE id_user = ? AND es_publicacion = 1";
-
-    console.log(sql, params);
-
     let [result] = await Pool.query(sql, params);
-    console.log(result);
 
     respuesta = {
       error: false,
@@ -154,9 +196,40 @@ const getUserTatuadorInfo = async (request, response) => {
 
   } catch (err) {
     console.log(err);
-  }
-
-  
+  } 
 };
 
-module.exports = { postRegister, postLogin, obtenerIdUsuario, editProfile, getTatuadoresExplora, getUserTatuadorInfo };
+const getTatuador = async (request,response) => 
+  {
+      try
+      {
+          let respuesta;
+          let sql = "SELECT * FROM user  WHERE nickname = ? OR style = ? OR studio =? ";
+          let params = [request.query.nickname,
+                        request.query.style,
+                        request.query.studio];
+          let res = await Pool.query(sql,params);
+          
+          if (res[0].length > 0){
+              respuesta = {
+              error:false,
+              codigo:200,
+              mensaje:"Tatuadores encontrados",
+              data: res[0]};
+          }else{
+              respuesta = {
+              error:true,
+              codigo:200,
+              mensaje:"no hay tatuadores",
+              data: null};
+          }
+          response.send(respuesta)
+          console.log(res[0])
+      }
+      catch(err)
+      {
+          console.log(err);
+      }
+  }
+
+module.exports = { postRegister, postLogin, obtenerIdUsuario, editProfile, getTatuadoresExplora, getUserTatuadorInfo, getArtistaInfo, getTatuador };
