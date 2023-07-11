@@ -1,3 +1,4 @@
+const { request, response } = require("express");
 const { Pool } = require("../database");
 
 const postRegister = async (request, response) => {
@@ -214,40 +215,122 @@ const getUserTatuadorInfo = async (request, response) => {
   } 
 };
 
-const getTatuador = async (request,response) => 
-  {
-      try
-      {
+      const deletePublicacion = async (request, response) => {
+        try{
           let respuesta;
-          let sql = `SELECT user.*, photo.photo
-          FROM user
-          INNER JOIN photo ON user.id_photo = photo.id_photo
-          WHERE nickname = ? OR style = ? OR studio =?`;
-          let params = [request.query.nickname,
-                        request.query.style,
-                        request.query.studio];
-          let res = await Pool.query(sql,params);
-          
-          if (res[0].length > 0){
-              respuesta = {
-              error:false,
-              codigo:200,
-              mensaje:"Tatuadores encontrados",
-              data: res[0]};
-          }else{
-              respuesta = {
-              error:true,
-              codigo:200,
-              mensaje:"no hay tatuadores",
-              data: null};
-          }
+          let sql = "DELETE FROM photo WHERE id_photo = '"+ request.body.id_photo +"'"
+          console.log(sql);
+
+          let [result] = await Pool.query(sql);
+          console.log(result);
+
+          respuesta = {
+            error: false,
+            codigo: 200,
+            mensaje: "publicacion borrada",
+            data_foto: result
+          };
+
           response.send(respuesta)
-          console.log(res[0])
-      }
-      catch(err)
-      {
+
+        }
+        catch (err){
           console.log(err);
+        }
       }
+
+const postOpinion = async (request, response) => {
+  try {
+   
+    let params = [];
+    let respuesta;
+    let sql2 = `INSERT INTO opiniones (emisor, receptor, comentario, puntuacion) VALUES (?,?,?,?)`;
+    console.log(sql2);
+    params = [
+      request.body.emisor,
+      request.body.receptor,
+      request.body.comentario,
+      request.body.puntuacion,
+    ]
+    
+    let [result] = await Pool.query(sql2, params);
+    respuesta = {
+      error: false,
+      codigo: 200,
+      mensaje: "opinion enviada",
+      data_opinion: result
+    };
+
+    console.log("hola :" + result);
+
+    response.send(respuesta)
+    console.log('esta es la respuesta: '+respuesta);
+
+  } catch (error) {
+    console.error(error);
+    response.send(error);
   }
 
-module.exports = { postRegister, postLogin, obtenerIdUsuario, editProfile, getTatuadoresExplora, getUserTatuadorInfo, getArtistaInfo, getTatuador };
+};
+
+//esto lo hago para mostrar las opiniones en la vista tatuador
+
+const getOpiniones = async (request, response) => {
+  try {
+    let respuesta;
+    let params = []
+    // let sql = "SELECT * FROM opiniones WHERE receptor = '"+ request.body.receptor +"'";
+    // let sql = "SELECT * FROM opiniones";
+    let sql = "SELECT * FROM opiniones WHERE receptor = ?"
+console.log(sql);
+    params = [request.params.receptor]
+    let [result] = await Pool.query(sql, params);
+    console.log(result);
+    respuesta = {
+      error: false,
+      codigo: 200,
+      mensaje: 'Opiniones obtenidas',
+      data_opinion: result
+    };
+console.log(respuesta);
+    response.send(respuesta);
+    
+  } catch (error) {
+    console.error(error);
+    response.send(error);
+  }
+};
+
+//para borrar opinion que escribe el usuario
+
+const borrarOpinion = async (request, response) => {
+  try{
+    console.log(request.body);
+    console.log("consoleloooooooooooooog");
+    let respuesta;
+    let sql = "DELETE FROM opiniones WHERE id_opiniones = '"+ request.body.id_opiniones +"'"
+    console.log(sql);
+
+    let [result] = await Pool.query(sql);
+    console.log(result);
+
+    respuesta = {
+      error: false,
+      codigo: 200,
+      mensaje: "opinion borrada",
+      data_foto: result
+    };
+
+    response.send(respuesta)
+
+  }
+  catch (err){
+    console.log(err);
+  }
+}
+
+
+
+
+
+module.exports = { postRegister, postLogin, getUserTatuadorInfo, deletePublicacion, postOpinion, getOpiniones, borrarOpinion };
