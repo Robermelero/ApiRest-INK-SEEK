@@ -5,20 +5,35 @@ const postRegister = async (request, response) => {
     console.log(request.body);
     let params = [];
     let sql =
-      "INSERT INTO user (name, last_name, email, password, id_photo, is_Tatuador) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO user (name, last_name, email, password, is_Tatuador) VALUES (?, ?, ?, ?, ?)";
     params = [
       request.body.name,
       request.body.last_name,
       request.body.email,
       request.body.password,
-      101,
       request.body.is_Tatuador ? 1 : 0,
     ];
 
     const connection = await Pool.getConnection();
-    
+    await connection.beginTransaction(); // Inicia una transacción para mantener la integridad de los datos
+
     let [result] = await connection.query(sql, params);
     console.log(result);
+
+    const userId = result.insertId; // Obtén el id_user generado
+
+    const photoSql =
+      "INSERT INTO photo (id_user, photo) VALUES (?, ?)";
+    const photoParams = [userId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SEPJ6ZsJBAYDB_lTtCfYcalzu2JFJTfuTw&usqp=CAU"]; 
+
+    await connection.query(photoSql, photoParams);
+
+    const updateSql = "UPDATE user SET id_photo = LAST_INSERT_ID() WHERE id_user = ?";
+    const updateParams = [userId];
+
+    await connection.query(updateSql, updateParams);
+
+    await connection.commit(); // Confirma la transacción
 
     connection.release();
 
