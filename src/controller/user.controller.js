@@ -30,6 +30,8 @@ const postRegister = async (request, response) => {
   }
 };
 
+
+
 const postLogin  = async (request,response) =>
 {
     try 
@@ -37,10 +39,11 @@ const postLogin  = async (request,response) =>
         
         let respuesta;
         // let sql = "SELECT * FROM user WHERE email = ? AND password = ?";
-        let sql = `SELECT * FROM user JOIN photo ON (user.id_user = photo.id_user) WHERE email = ? AND password = ? AND es_publicacion = 0`
+        let sql = `SELECT user.*, photo.photo FROM user JOIN photo ON (user.id_user = photo.id_user) WHERE email = ? AND password = ? AND es_publicacion = 0`
         let params = [request.body.email,
                 request.body.password];
         let res = await Pool.query (sql, params);
+        console.log(res[0])
     
         if (res[0].length > 0){
             respuesta = {
@@ -201,7 +204,10 @@ const getTatuador = async (request,response) =>
       try
       {
           let respuesta;
-          let sql = "SELECT * FROM user  WHERE nickname = ? OR style = ? OR studio =? ";
+          let sql = `SELECT user.*, photo.photo
+          FROM user
+          INNER JOIN photo ON user.id_photo = photo.id_photo
+          WHERE nickname = ? OR style = ? OR studio =?`;
           let params = [request.query.nickname,
                         request.query.style,
                         request.query.studio];
