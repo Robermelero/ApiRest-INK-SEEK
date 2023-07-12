@@ -3,8 +3,9 @@ const router = Router();
 
 const followCtrl = require("../controller/follow.controller");
 
-router.post('/user/:id_user/follow/', followCtrl.postFollow);
-router.post('/user/:id_user/unfollow', followCtrl.postUnfollow);
+router.post('/user/follow/:id_user/:id_follower', followCtrl.postFollow);
+router.post('/user/unfollow/:id_user/:id_follower', followCtrl.postUnfollow);
+router.get('/user/check/:id_user/:id_follower', followCtrl.getcheckFollow)
 
 
 

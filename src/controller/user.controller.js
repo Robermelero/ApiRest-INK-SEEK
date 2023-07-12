@@ -2,23 +2,36 @@ const { Pool } = require("../database");
 
 const postRegister = async (request, response) => {
   try {
-    console.log(request.body);
     let params = [];
     let sql =
-      "INSERT INTO user (name, last_name, email, password, id_photo, is_Tatuador) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO user (name, last_name, email, password, is_Tatuador) VALUES (?, ?, ?, ?, ?)";
     params = [
       request.body.name,
       request.body.last_name,
       request.body.email,
       request.body.password,
-      101,
       request.body.is_Tatuador ? 1 : 0,
     ];
 
     const connection = await Pool.getConnection();
-    
+    await connection.beginTransaction(); // Inicia una transacción para mantener la integridad de los datos
+
     let [result] = await connection.query(sql, params);
-    console.log(result);
+
+    const userId = result.insertId; // Obtén el id_user generado
+
+    const photoSql =
+      "INSERT INTO photo (id_user, photo) VALUES (?, ?)";
+    const photoParams = [userId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SEPJ6ZsJBAYDB_lTtCfYcalzu2JFJTfuTw&usqp=CAU"]; 
+
+    await connection.query(photoSql, photoParams);
+
+    const updateSql = "UPDATE user SET id_photo = LAST_INSERT_ID() WHERE id_user = ?";
+    const updateParams = [userId];
+
+    await connection.query(updateSql, updateParams);
+
+    await connection.commit(); // Confirma la transacción
 
     connection.release();
 
@@ -30,6 +43,8 @@ const postRegister = async (request, response) => {
   }
 };
 
+
+
 const postLogin  = async (request,response) =>
 {
     try 
@@ -37,7 +52,7 @@ const postLogin  = async (request,response) =>
         
         let respuesta;
         // let sql = "SELECT * FROM user WHERE email = ? AND password = ?";
-        let sql = `SELECT * FROM user JOIN photo ON (user.id_user = photo.id_user) WHERE email = ? AND password = ? AND es_publicacion = 0`
+        let sql = `SELECT user.*, photo.photo FROM user JOIN photo ON (user.id_photo = photo.id_photo) WHERE email = ? AND password = ? AND es_publicacion = 0`
         let params = [request.body.email,
                 request.body.password];
         let res = await Pool.query (sql, params);
@@ -78,7 +93,7 @@ const postLogin  = async (request,response) =>
           res.status(500).json({ error: 'Error al obtener el ID del usuario' });
         }
       };
-        /////EDITAR PERFIL////
+  /////EDITAR PERFIL////
   const editProfile = async (request, response) => {
     try {
       let sql = `
@@ -94,7 +109,6 @@ const postLogin  = async (request,response) =>
     ];
 
       let res = await Pool.query(sql, params);
-      console.log(res)
       response.json({
         error: false,
         message: "Perfil actualizado correctamente"
@@ -134,7 +148,6 @@ const getTatuadoresExplora = async (request, response) => {
         data_artistas: null};
     }
     response.send(respuesta)
-    console.log(res[0])
   }
   catch(err){
     console.log(err)
@@ -201,7 +214,10 @@ const getTatuador = async (request,response) =>
       try
       {
           let respuesta;
-          let sql = "SELECT * FROM user  WHERE nickname = ? OR style = ? OR studio =? ";
+          let sql = `SELECT user.*, photo.photo
+          FROM user
+          INNER JOIN photo ON user.id_photo = photo.id_photo
+          WHERE nickname = ? OR style = ? OR studio =?`;
           let params = [request.query.nickname,
                         request.query.style,
                         request.query.studio];
@@ -221,7 +237,6 @@ const getTatuador = async (request,response) =>
               data: null};
           }
           response.send(respuesta)
-          console.log(res[0])
       }
       catch(err)
       {

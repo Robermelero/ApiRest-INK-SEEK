@@ -70,7 +70,7 @@ const getCitas = async (req, res) => {
 };
 const getCitasId = async (req, res) => {
   try {
-    const id_cita = req.params.id_cita;  // Corregir el nombre del parámetro a id_cita
+    const id_cita = req.params.id_cita; 
     const params = [id_cita];
     let sql = "SELECT c.hora, c.id_cita, c.fecha, c.asunto, u.email, u.name, u.last_name FROM cita AS c INNER JOIN user AS u ON (u.id_user = c.email ) WHERE c.id_cita = ?"
     const [result] = await Pool.query(sql, params);
@@ -82,22 +82,22 @@ const getCitasId = async (req, res) => {
       respuesta = {
         error: false,
         codigo: 200,
-        mensaje: "Cita obtenida exitosamente",  // Actualizar el mensaje
-        data_cita: result[0]  // Cambiar el nombre a data_cita en lugar de data_citas
+        mensaje: "Cita obtenida exitosamente", 
+        data_cita: result[0]  
       };
     } else {
       respuesta = {
         error: true,
         codigo: 200,
-        mensaje: "No se encontró la cita",  // Actualizar el mensaje
-        data_cita: null  // Cambiar el nombre a data_cita en lugar de data_citas
+        mensaje: "No se encontró la cita", 
+        data_cita: null 
       };
     }
 
     res.send(respuesta);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error al obtener la cita");  // Actualizar el mensaje
+    res.status(500).send("Error al obtener la cita");  
   }
 };
 

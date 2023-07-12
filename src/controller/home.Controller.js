@@ -4,7 +4,8 @@ const { Pool } = require("../database");
 
 const homeGetPhotos = async (req, res) => {
     try {
-      const id_user= req.params.id_user
+        const id_follower= req.params.id_follower
+        const id_user= req.params.id_user
       const fotos = await Pool.query(`
       SELECT p.*, u.nickname AS user_name,(SELECT photo FROM photo WHERE id_user=u.id_user AND es_publicacion=0 LIMIT 1)as photoPerfil
       FROM photo p
@@ -21,6 +22,7 @@ const homeGetPhotos = async (req, res) => {
         mensaje: 'fotos obtenidas',
         fotos: fotos,
       };
+
       res.send(respuesta);
     } catch (error) {
       const respuesta = {
