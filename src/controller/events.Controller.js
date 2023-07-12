@@ -2,6 +2,7 @@ const { Pool } = require("../database");
 
 const postEvent=async(req,res)=>{
     const id_user=req.params.id_user;
+    // console.log(id_user);
     const {photo,title,fecha_inicio,fecha_final,place}=req.body; 
     try{
        const imagen= await Pool.query(`
@@ -83,7 +84,6 @@ const deleteEvent = async (req, res) => {
       };
       console.log(error);
       res.send(respuesta);
-      console.log("error");
     }
   };
 
