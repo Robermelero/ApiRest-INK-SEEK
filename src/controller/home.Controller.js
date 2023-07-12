@@ -4,7 +4,6 @@ const homeGetPhotos = async (req, res) => {
     try {
         const id_follower= req.params.id_follower
         const id_user= req.params.id_user
-      console.log("entrando");
       const fotos = await Pool.query(`
       SELECT p.*, u.name as user_name FROM photo p 
       INNER JOIN follow f ON p.id_user = f.id_user 
@@ -12,7 +11,6 @@ const homeGetPhotos = async (req, res) => {
       WHERE f.id_follower = ? AND f.id_user = ? AND (p.es_publicacion = 1 OR p.es_publicacion = 0)
       `,[id_follower,id_user]);
 
-      console.log("toma tus fotos",fotos);
   
       const respuesta = {
         error: false,
@@ -21,7 +19,6 @@ const homeGetPhotos = async (req, res) => {
         fotos: fotos,
         
       };
-      console.log("respueta",respuesta);
 
       res.send(respuesta);
     } catch (error) {
@@ -33,7 +30,6 @@ const homeGetPhotos = async (req, res) => {
       };
       console.log(error);
       res.send(respuesta);
-      console.log("error");
     }
   };
 
@@ -43,7 +39,6 @@ const homeGetPhotos = async (req, res) => {
         const search = req.query.q;
         const id_user1 = req.params.id_user1;
 
-        console.log("Entrando a la búsqueda");
 
         const fotos = await Pool.query(`
         SELECT p.*

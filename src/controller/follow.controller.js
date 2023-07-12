@@ -4,9 +4,7 @@ const postFollow = async (req, res) => {
 
   try {
     let id_user = req.params.id_user;
-    console.log(id_user)
     let id_follower = req.params.id_follower;
-    console
  
 
     let respuesta;
@@ -18,7 +16,6 @@ const postFollow = async (req, res) => {
     
 
     if (resCheck.length > 0) {
-      console.log(resCheck)
       respuesta = {
         error: false,
         codigo: 200,
