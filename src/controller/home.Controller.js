@@ -15,7 +15,6 @@ const homeGetPhotos = async (req, res) => {
       WHERE f.id_user= ?
     ) AND p.es_publicacion = 1
       `,[id_user]);
-      // console.log(fotos[0]);
       const respuesta = {
         error: false,
         codigo: 200,
@@ -39,8 +38,7 @@ const homeGetPhotos = async (req, res) => {
     try {
         const search = req.params.search;
         const id_user=req.params.id_user
-
-
+        console.log("user", req.params.id_user, req.params.search,"busqueda");
 
 
         const fotos = await Pool.query(`
@@ -50,9 +48,9 @@ const homeGetPhotos = async (req, res) => {
         INNER JOIN follow f ON u.id_user = f.id_follower
         WHERE (u.nickname LIKE ? OR u.name LIKE ? OR u.style LIKE ?) AND f.id_user = ? AND p.es_publicacion = 1
         `, [`%${search}%`, `%${search}%`,`%${search}%`, id_user]);
-        // console.log("busqueda",search)
-        // console.log(fotos[0]);
-        // console.log(id_user,"id");
+        console.log("busqueda",search)
+        console.log(fotos[0]);
+
 
 
       const respuesta = {
@@ -60,7 +58,7 @@ const homeGetPhotos = async (req, res) => {
         codigo: 200,
   
         mensaje: 'toma tus fotos',
-        fotos: fotos,//tiene que ser fotos cuando consiga llenar el array
+        fotos: fotos,
       };
       // console.log(respuesta);
       res.send(respuesta);
@@ -72,7 +70,7 @@ const homeGetPhotos = async (req, res) => {
         error: error.message,
       };
       // console.log(error);
-      res.send(respuesta);
+      // res.send(respuesta);
     }
   };
 

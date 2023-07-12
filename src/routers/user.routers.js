@@ -9,7 +9,7 @@ router.get("/descubrir-artista", userCtrl.getTatuadoresExplora)
 router.get('/profile-tatuador-propia/:id_user', userCtrl.getUserTatuadorInfo)
 router.get('/profile-tatuador-externa/:id_user', userCtrl.getUserTatuadorInfo)
 router.get("/explorar", userCtrl.getTatuador);
-
+router.get("/home/:id_user", userCtrl.getArtistaInfo)
 router.get('/user/:email', userCtrl.obtenerIdUsuario);
 
 
