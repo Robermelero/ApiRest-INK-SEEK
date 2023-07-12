@@ -54,7 +54,7 @@ const postLogin  = async (request,response) =>
         
         let respuesta;
         // let sql = "SELECT * FROM user WHERE email = ? AND password = ?";
-        let sql = `SELECT user.*, photo.photo FROM user JOIN photo ON (user.id_user = photo.id_user) WHERE email = ? AND password = ? AND es_publicacion = 0`
+        let sql = `SELECT user.*, photo.photo FROM user JOIN photo ON (user.id_photo = photo.id_photo) WHERE email = ? AND password = ? AND es_publicacion = 0`
         let params = [request.body.email,
                 request.body.password];
         let res = await Pool.query (sql, params);
