@@ -3,7 +3,6 @@ const { Pool } = require("../database");
 
 const postRegister = async (request, response) => {
   try {
-    console.log(request.body);
     let params = [];
     let sql =
       "INSERT INTO user (name, last_name, email, password, is_Tatuador) VALUES (?, ?, ?, ?, ?)";
@@ -19,7 +18,6 @@ const postRegister = async (request, response) => {
     await connection.beginTransaction(); // Inicia una transacción para mantener la integridad de los datos
 
     let [result] = await connection.query(sql, params);
-    console.log(result);
 
     const userId = result.insertId; // Obtén el id_user generado
 
@@ -55,11 +53,10 @@ const postLogin  = async (request,response) =>
         
         let respuesta;
         // let sql = "SELECT * FROM user WHERE email = ? AND password = ?";
-        let sql = `SELECT user.*, photo.photo FROM user JOIN photo ON (user.id_user = photo.id_user) WHERE email = ? AND password = ? AND es_publicacion = 0`
+        let sql = `SELECT user.*, photo.photo FROM user JOIN photo ON (user.id_photo = photo.id_photo) WHERE email = ? AND password = ? AND es_publicacion = 0`
         let params = [request.body.email,
                 request.body.password];
         let res = await Pool.query (sql, params);
-        console.log(res[0])
     
         if (res[0].length > 0){
             respuesta = {
@@ -113,7 +110,6 @@ const postLogin  = async (request,response) =>
     ];
 
       let res = await Pool.query(sql, params);
-      console.log(res)
       response.json({
         error: false,
         message: "Perfil actualizado correctamente"
@@ -153,7 +149,6 @@ const getTatuadoresExplora = async (request, response) => {
         data_artistas: null};
     }
     response.send(respuesta)
-    console.log(res[0])
   }
   catch(err){
     console.log(err)
@@ -232,9 +227,9 @@ const getUserTatuadorInfo = async (request, response) => {
           };
 
           response.send(respuesta)
-
-        }
-        catch (err){
+      }
+      catch(err)
+      {
           console.log(err);
         }
       }

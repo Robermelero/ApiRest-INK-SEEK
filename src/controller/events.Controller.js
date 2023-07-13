@@ -83,7 +83,6 @@ const deleteEvent = async (req, res) => {
       };
       console.log(error);
       res.send(respuesta);
-      console.log("error");
     }
   };
 
