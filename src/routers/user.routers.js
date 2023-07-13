@@ -8,14 +8,16 @@ router.put("/edit-profile-tatuador", userCtrl.editProfile);
 router.get("/descubrir-artista", userCtrl.getTatuadoresExplora)
 router.get('/profile-tatuador-propia/:id_user', userCtrl.getUserTatuadorInfo);
 router.delete('/profile-tatuador-propia', userCtrl.deletePublicacion);
+
+
+
 router.post('/estrellas', userCtrl.postOpinion);
 router.get('/opiniones/:receptor', userCtrl.getOpiniones);
-router.delete('/estrellas', userCtrl.borrarOpinion);
 
 
+router.delete('/estrellas/:id_opiniones', userCtrl.borrarOpinion);
 router.get('/profile-tatuador-externa/:id_user', userCtrl.getUserTatuadorInfo)
 router.get("/explorar", userCtrl.getTatuador);
-
 router.get('/user/:email', userCtrl.obtenerIdUsuario);
 
 
