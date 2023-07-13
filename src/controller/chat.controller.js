@@ -3,28 +3,66 @@ const { Pool } = require("../database")
 
 
 
-const getChats = async (req,res) =>{
+// const getChats = async (req,res) =>{
     
-    try{
+//     try{
+//         let respuesta;
+//         let params = [];
+
+        
+//         let sql = "SELECT id_chat, name, photo  FROM chat JOIN user ON (chat.id_user2 = user.id_user) JOIN photo ON(user.id_photo = photo.id_photo) WHERE id_user1 = ?"
+
+//         console.log(sql);
+
+//         params = [req.params.id_user1];
+
+//         let [result] = await Pool.query(sql, params);
+//         console.log(result);
+
+
+//         respuesta ={
+//             error : false, codigo :200 , mensaje :"chats encontrados",
+//             data_conversacion : result
+//         }
+//         res.send(respuesta)
+//     }
+//     catch(err){
+//         res.send(err)
+//     }
+// }
+
+const getChats = async (req, res) => {
+
+    try {
         let respuesta;
-        let params = [];
-        let sql = "SELECT id_chat, name, photo  FROM chat JOIN user ON (chat.id_user2 = user.id_user) JOIN photo ON(user.id_photo = photo.id_photo) WHERE id_user1 = ? "
+        let params = [req.query.id_user];
+
+
+        let sql = "SELECT id_chat, name, photo, id_user2  FROM chat JOIN user ON (chat.id_user2 = user.id_user) JOIN photo ON(user.id_photo = photo.id_photo) WHERE id_user1 = ?"
 
         console.log(sql);
+        
 
-        params = [req.params.id_user1];
+       
 
-        let [result] = await Pool.query(sql, params);
-        console.log(result);
+        let [resultUser1] = await Pool.query(sql, params);
 
+        console.log(resultUser1)
 
-        respuesta ={
-            error : false, codigo :200 , mensaje :"chats encontrados",
-            data_conversacion : result
+        sql = "SELECT id_chat, name, photo  FROM chat JOIN user ON (chat.id_user1 = user.id_user) JOIN photo ON(user.id_photo = photo.id_photo) WHERE id_user2 = ?"
+
+        let [resultUser2] = await Pool.query(sql, params);
+
+        console.log(resultUser2);
+
+        respuesta = {
+            error: false, codigo: 200, mensaje: "chats encontrados",
+            data_conversacion: [...resultUser1, ...resultUser2]
         }
         res.send(respuesta)
+
     }
-    catch(err){
+    catch (err) {
         res.send(err)
     }
 }
@@ -109,7 +147,7 @@ const postChat = async (req, res)=>{
         let [result] = await Pool.query(sql, params)
 
         respuesta = {
-            error : false , codigo : 200, mensaje : "chat creado", data_conversacion : result}
+            error : false , codigo : 200, mensaje : "chat creado", id_chat : result.insertId}
 
         res.send(respuesta)
     }
@@ -124,7 +162,6 @@ const postMensaje = async (req, res) =>{
 
         let params = [];
 
-        // let sql = "INSERT INTO mensaje (mensaje, id_participante, id_chat) VALUES ('"+req.body.mensaje+"', '"+req.body.id_participante+"','"+req.body.id_chat+"')"
         let sql = "INSERT INTO mensaje (mensaje, id_participante, id_chat) VALUES (?,?,?)"
 
 

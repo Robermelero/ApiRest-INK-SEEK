@@ -3,7 +3,9 @@ const router = Router();
 const chatCtrl = require("../controller/chat.controller");
 
 
-router.get("/chats/:id_user1", chatCtrl.getChats)
+router.get("/chats", chatCtrl.getChats)
+
+// router.get("/chats/:id_user2", chatCtrl.getChatsUser2)
 
 router.get("/chat/:id_chat", chatCtrl.getMensajes);
 
