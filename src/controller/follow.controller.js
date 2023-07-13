@@ -94,23 +94,10 @@ const getcheckFollow = async (req, res) => {
 
     let [resCheck] = await Pool.query(sqlCheck, paramsCheck);
 
-    if (resCheck.length === 0) {
-      respuesta = {
-        error: false,
-        codigo: 200,
-        mensaje: "No sigues a este usuario",
-        data: null
-      };
-    } else {
-      respuesta = {
-        error: false,
-        codigo: 200,
-        mensaje: "Ya sigues a este usuario",
-        data: null
-      };
-    }
 
-    res.send(respuesta);
+    res.send(resCheck.length > 0);
+    console.log("api")
+    console.log(resCheck)
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error interno del servidor' });
