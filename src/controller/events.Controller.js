@@ -23,7 +23,6 @@ const postEvent=async(req,res)=>{
         res.send(respuesta);
     }catch(error){
         respuesta= {error:true, codigo:200, mensaje:"error al añadir evento",error}
-        console.log(error);
         res.send(respuesta);
         console.log("error al añadir evento");
     }
@@ -53,7 +52,6 @@ const deleteEvent = async (req, res) => {
         mensaje: 'Error al eliminar evento',
         error: error.message,
       };
-      console.log(error);
       res.send(respuesta);
     }
   };
@@ -81,7 +79,6 @@ const deleteEvent = async (req, res) => {
         mensaje: 'Error al obtener eventos',
         error: error.message,
       };
-      console.log(error);
       res.send(respuesta);
     }
   };
@@ -113,7 +110,6 @@ const deleteEvent = async (req, res) => {
         mensaje: 'Error al buscar eventos',
         error: error.message,
       };
-      console.log(error);
       res.send(respuesta);
     }
   };

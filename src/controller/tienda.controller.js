@@ -8,10 +8,8 @@ const getProducto = async (req, res)=>{
          params =[
             req.params.id_user,
         ]
-        
-        console.log(sql);
+    
         let [result] = await Pool.query(sql,params);
-        console.log(result);
 
         if(result.length > 0){
             respuesta ={
@@ -20,7 +18,6 @@ const getProducto = async (req, res)=>{
         }
     }
     catch(err){
-        console.log(err)
     }
 }
 
@@ -30,12 +27,9 @@ const postProducto = async (req, res)=>{
     
         let sql2 = "INSERT INTO photo (photo, id_user) VALUES ('"+req.body.photo+"', '"+req.body.id_user+"')"
         
-        console.log(sql2)
         let [result] = await Pool.query(sql2);
-        console.log(result);
         let sql3 ="INSERT INTO producto (name,id_user, id_photo) VALUES ('"+req.body.name+"','"+req.body.id_user+"',"+result.insertId+")";
         [result] = await Pool.query(sql3)
-        console.log(result)
         
 
         if(result.length > 0){
@@ -45,7 +39,6 @@ const postProducto = async (req, res)=>{
         }
     }
     catch(err){
-        console.log(err)
     }
 }
 
@@ -55,9 +48,7 @@ const deleteProducto = async(req, res)=>{
         let respuesta;
         let sql = "DELETE FROM photo WHERE id_photo = '"+req.body.id_photo+"' "
 
-        console.log(sql)
         let [result] = await Pool.query(sql)
-        console.log(result)
 
         respuesta = {error : false, codigo : 200, mensaje: 'producto borrado satisfactoriamente', data_prenda : result}
         res.send(respuesta)
@@ -67,7 +58,6 @@ const deleteProducto = async(req, res)=>{
         // }
     }
     catch(err){
-        console.log(err)
     }
 }
 

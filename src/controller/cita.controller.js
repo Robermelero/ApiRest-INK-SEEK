@@ -31,7 +31,7 @@ const addCita = async (request, response) => {
 
     response.send(respuesta);
   } catch (error) {
-    console.log(error);
+    
     response.status(500).send("Error al agregar la cita");
   }
 };

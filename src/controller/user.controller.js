@@ -39,7 +39,6 @@ const postRegister = async (request, response) => {
     if (result.insertId) response.send(String(result.insertId));
     else response.send("-1");
   } catch (error) {
-    console.error(error);
     response.send(error);
   }
 };
@@ -79,7 +78,6 @@ const postLogin  = async (request,response) =>
       }
         catch (err)
         {
-            console.log(err)
         }
       }
       const obtenerIdUsuario = async (req, res) => {
@@ -94,7 +92,6 @@ const postLogin  = async (request,response) =>
             res.status(404).json({ error: 'Usuario no encontrado' });
           }
         } catch (error) {
-          console.log(error);
           res.status(500).json({ error: 'Error al obtener el ID del usuario' });
         }
       };
@@ -119,7 +116,6 @@ const postLogin  = async (request,response) =>
         message: "Perfil actualizado correctamente"
       });
     } catch (error) {
-      console.log(error);
       response.status(500).json({
         error: true,
         message: "Ocurrió un error al actualizar el perfil"
@@ -155,7 +151,6 @@ const getTatuadoresExplora = async (request, response) => {
     response.send(respuesta)
   }
   catch(err){
-    console.log(err)
   }
 }   
 
@@ -188,7 +183,6 @@ const getArtistaInfo = async (request,response) => {
     }
       catch (err)
       {
-          console.log(err)
       }
 }
 
@@ -220,11 +214,9 @@ const getTatuador = async (request,response) =>
               data: null};
           }
           response.send(respuesta)
-          console.log(res[0])
       }
       catch(err)
       {
-          console.log(err);
       }
   }
 
@@ -246,7 +238,6 @@ const getUserTatuadorInfo = async (request, response) => {
     response.send(respuesta)
 
   } catch (err) {
-    console.log(err);
   } 
 };
 
@@ -254,10 +245,8 @@ const getUserTatuadorInfo = async (request, response) => {
         try{
           let respuesta;
           let sql = "DELETE FROM photo WHERE id_photo = '"+ request.body.id_photo +"'"
-          console.log(sql);
 
           let [result] = await Pool.query(sql);
-          console.log(result);
 
           respuesta = {
             error: false,
@@ -270,8 +259,7 @@ const getUserTatuadorInfo = async (request, response) => {
       }
       catch(err)
       {
-          console.log(err);
-        }
+      }
       }
 
 const postOpinion = async (request, response) => {
@@ -280,7 +268,6 @@ const postOpinion = async (request, response) => {
     let params = [];
     let respuesta;
     let sql2 = `INSERT INTO opiniones (emisor, receptor, comentario, puntuacion) VALUES (?,?,?,?)`;
-    console.log(sql2);
     params = [
       request.body.emisor,
       request.body.receptor,
@@ -296,10 +283,8 @@ const postOpinion = async (request, response) => {
       data_opinion: result
     };
 
-    console.log("hola :" + result);
 
     response.send(respuesta)
-    console.log('esta es la respuesta: '+respuesta);
 
   } catch (error) {
     console.error(error);
@@ -331,8 +316,6 @@ console.log(respuesta);
     response.send(respuesta);
     
   } catch (error) {
-    console.error(error);
-    response.send(error);
   }
 };
 
@@ -340,15 +323,12 @@ console.log(respuesta);
 
 const borrarOpinion = async (request, response) => {
   try{
-    console.log(request.body);
-    console.log("consoleloooooooooooooog");
+
     let respuesta;
     let sql = "DELETE FROM opiniones WHERE id_opiniones = ?"
     let params = [request.body.id_opiniones];
-    console.log(sql);
    
     let [result] = await Pool.query(sql, params);
-    console.log(result);
 
     respuesta = {
       error: false,
@@ -361,7 +341,6 @@ const borrarOpinion = async (request, response) => {
 
   }
   catch (err){
-    console.log(err);
   }
 }
 
