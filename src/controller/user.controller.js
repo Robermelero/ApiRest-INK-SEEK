@@ -188,6 +188,42 @@ const getArtistaInfo = async (request,response) => {
       }
 }
 
+const getTatuador = async (request,response) => 
+  {
+      try
+      {
+          let respuesta;
+          let sql = `SELECT user.*, photo.photo
+          FROM user
+          INNER JOIN photo ON user.id_photo = photo.id_photo
+          WHERE nickname = ? OR style = ? OR studio =?`;
+          let params = [request.query.nickname,
+                        request.query.style,
+                        request.query.studio];
+          let res = await Pool.query(sql,params);
+          
+          if (res[0].length > 0){
+              respuesta = {
+              error:false,
+              codigo:200,
+              mensaje:"Tatuadores encontrados",
+              data: res[0]};
+          }else{
+              respuesta = {
+              error:true,
+              codigo:200,
+              mensaje:"no hay tatuadores",
+              data: null};
+          }
+          response.send(respuesta)
+          console.log(res[0])
+      }
+      catch(err)
+      {
+          console.log(err);
+      }
+  }
+
 //VISTA PERFIL PROPIA
 const getUserTatuadorInfo = async (request, response) => {
   try {
@@ -276,7 +312,7 @@ const getOpiniones = async (request, response) => {
     let params = []
     // let sql = "SELECT * FROM opiniones WHERE receptor = '"+ request.body.receptor +"'";
     // let sql = "SELECT * FROM opiniones";
-    let sql = "SELECT * FROM opiniones WHERE receptor = ?"
+    let sql = "SELECT id_opiniones, emisor, receptor, comentario, puntuacion, photo, name FROM opiniones JOIN user ON (opiniones.emisor = user.id_user) JOIN photo ON (user.id_photo = photo.id_photo) WHERE receptor = ?"
 console.log(sql);
     params = [request.params.receptor]
     let [result] = await Pool.query(sql, params);
@@ -303,17 +339,18 @@ const borrarOpinion = async (request, response) => {
     console.log(request.body);
     console.log("consoleloooooooooooooog");
     let respuesta;
-    let sql = "DELETE FROM opiniones WHERE id_opiniones = '"+ request.body.id_opiniones +"'"
+    let sql = "DELETE FROM opiniones WHERE id_opiniones = ?"
+    let params = [request.body.id_opiniones];
     console.log(sql);
-
-    let [result] = await Pool.query(sql);
+   
+    let [result] = await Pool.query(sql, params);
     console.log(result);
 
     respuesta = {
       error: false,
       codigo: 200,
       mensaje: "opinion borrada",
-      data_foto: result
+      data_opinion: result
     };
 
     response.send(respuesta)
@@ -328,4 +365,4 @@ const borrarOpinion = async (request, response) => {
 
 
 
-module.exports = { postRegister, postLogin, getUserTatuadorInfo, deletePublicacion, postOpinion, getOpiniones, borrarOpinion, getTatuadoresExplora };
+module.exports = { postRegister, postLogin, getUserTatuadorInfo, deletePublicacion, postOpinion, getOpiniones, borrarOpinion, obtenerIdUsuario, editProfile, getTatuadoresExplora, getArtistaInfo, getTatuador };
