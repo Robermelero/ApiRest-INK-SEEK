@@ -15,12 +15,12 @@ const postRegister = async (request, response) => {
     ];
 
     const connection = await Pool.getConnection();
-    await connection.beginTransaction(); // Inicia una transacción para mantener la integridad de los datos
+    await connection.beginTransaction(); 
 
     let [result] = await connection.query(sql, params);
     console.log(result);
 
-    const userId = result.insertId; // Obtén el id_user generado
+    const userId = result.insertId; 
 
     const photoSql =
       "INSERT INTO photo (id_user, photo) VALUES (?, ?)";
