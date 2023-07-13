@@ -328,4 +328,4 @@ const borrarOpinion = async (request, response) => {
 
 
 
-module.exports = { postRegister, postLogin, getUserTatuadorInfo, deletePublicacion, postOpinion, getOpiniones, borrarOpinion };
+module.exports = { postRegister, postLogin, getUserTatuadorInfo, deletePublicacion, postOpinion, getOpiniones, borrarOpinion, getTatuadoresExplora };
