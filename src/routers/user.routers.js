@@ -17,7 +17,7 @@ router.get('/opiniones/:receptor', userCtrl.getOpiniones);
 
 router.delete('/estrellas/:id_opiniones', userCtrl.borrarOpinion);
 router.get('/profile-tatuador-externa/:id_user', userCtrl.getUserTatuadorInfo)
-router.get("/explorar", userCtrl.getTatuador);
+router.get("/explorar/search", userCtrl.getTatuador);
 router.get("/home/:id_user", userCtrl.getArtistaInfo)
 router.get('/user/:email', userCtrl.obtenerIdUsuario);
 router.get("/chats/:id_user", userCtrl.getArtistaInfo)
