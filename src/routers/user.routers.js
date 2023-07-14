@@ -22,4 +22,5 @@ router.get("/home/:id_user", userCtrl.getArtistaInfo)
 router.get('/user/:email', userCtrl.obtenerIdUsuario);
 router.get("/chats/:id_user", userCtrl.getArtistaInfo)
 
+
 module.exports = router;
