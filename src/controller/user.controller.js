@@ -194,18 +194,18 @@ const getArtistaInfo = async (request,response) => {
 
 const getTatuador = async (request,response) => 
   {
+      const {search}=request.query
       try
       {
-          let respuesta;
-          let sql = `SELECT user.*, photo.photo
-          FROM user
-          INNER JOIN photo ON user.id_photo = photo.id_photo
-          WHERE nickname = ? OR style = ? OR studio =?`;
-          let params = [request.query.nickname,
-                        request.query.style,
-                        request.query.studio];
-          let res = await Pool.query(sql,params);
-          
+            let respuesta;
+            let res = await Pool.query(
+            `SELECT user.*, photo.photo
+            FROM user
+            INNER JOIN photo ON user.id_photo = photo.id_photo
+            WHERE nickname LIKE ? or style LIKE ? or studio LIKE?`,
+             [`%${search}%`,`%${search}%`,`%${search}%`]);
+            console.log(search); 
+            
           if (res[0].length > 0){
               respuesta = {
               error:false,
