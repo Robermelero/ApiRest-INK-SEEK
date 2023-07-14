@@ -225,7 +225,7 @@ const getUserTatuadorInfo = async (request, response) => {
   try {
     let params = [request.params.id_user];
     let respuesta;
-    let sql = "SELECT * FROM photo WHERE id_user = ? AND es_publicacion = 1";
+    let sql = "SELECT * FROM photo WHERE id_user = ? AND es_publicacion = 1 ORDER BY id_photo DESC;";
     let [result] = await Pool.query(sql, params);
 
     respuesta = {
