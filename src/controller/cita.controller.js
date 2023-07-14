@@ -4,7 +4,6 @@ const { Pool } = require("../database");
 const addCita = async (request, response) => {
   try {
     const { id_user, email, fecha, hora, asunto } = request.body;
-    
 
     const sql = "INSERT INTO cita (id_user, email, fecha, hora, asunto) VALUES (?, ?, ?, ?, ?)";
     const params = [id_user, email, fecha, hora, asunto];
@@ -38,9 +37,9 @@ const addCita = async (request, response) => {
 
 const getCitas = async (req, res) => {
   try {
-    const id_user = req.params.id_user; 
+    const id_user = req.params.id_user;
     const params = [id_user];
-    let sql = "SELECT c.hora, c.id_cita, c.fecha, c.asunto,  u.name, u.last_name FROM cita AS c INNER JOIN user AS u ON (u.id_user = c.email ) WHERE c.id_user = ?"
+    const sql = "SELECT c.hora, c.id_cita, c.fecha, c.asunto, u.name, u.last_name FROM cita AS c INNER JOIN user AS u ON (u.id_user = c.email ) WHERE c.id_user = ?";
     const [result] = await Pool.query(sql, params);
     console.log(result);
 
@@ -68,11 +67,44 @@ const getCitas = async (req, res) => {
     res.status(500).send("Error al obtener las citas");
   }
 };
+
+const getCitasByEmail = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const params = [email];
+    const sql = "SELECT c.hora, c.id_cita, c.fecha, c.asunto, u.email, u.name, u.last_name FROM cita AS c INNER JOIN user AS u ON (u.id_user = c.id_user ) WHERE c.email = ?";
+    const [result] = await Pool.query(sql, params);
+
+    let respuesta;
+
+    if (result.length > 0) {
+      respuesta = {
+        error: false,
+        codigo: 200,
+        mensaje: "Citas obtenidas exitosamente",
+        data_citas: result
+      };
+    } else {
+      respuesta = {
+        error: false,
+        codigo: 200,
+        mensaje: "No se encontraron citas para el usuario",
+        data_citas: null
+      };
+    }
+
+    res.send(respuesta);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error al obtener las citas");
+  }
+};
+
 const getCitasId = async (req, res) => {
   try {
-    const id_cita = req.params.id_cita; 
+    const id_cita = req.params.id_cita;
     const params = [id_cita];
-    let sql = "SELECT c.hora, c.id_cita, c.fecha, c.asunto, u.email, u.name, u.last_name FROM cita AS c INNER JOIN user AS u ON (u.id_user = c.email ) WHERE c.id_cita = ?"
+    const sql = "SELECT c.hora, c.id_cita, c.fecha, c.asunto, u.email, u.name, u.last_name FROM cita AS c INNER JOIN user AS u ON (u.id_user = c.email ) WHERE c.id_cita = ?";
     const [result] = await Pool.query(sql, params);
     console.log(result);
 
@@ -82,25 +114,24 @@ const getCitasId = async (req, res) => {
       respuesta = {
         error: false,
         codigo: 200,
-        mensaje: "Cita obtenida exitosamente", 
-        data_cita: result[0]  
+        mensaje: "Cita obtenida exitosamente",
+        data_cita: result[0]
       };
     } else {
       respuesta = {
         error: true,
         codigo: 200,
-        mensaje: "No se encontró la cita", 
-        data_cita: null 
+        mensaje: "No se encontró la cita",
+        data_cita: null
       };
     }
 
     res.send(respuesta);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error al obtener la cita");  
+    res.status(500).send("Error al obtener la cita");
   }
 };
-
 
 const modificarCita = async (request, response) => {
   try {
@@ -172,7 +203,4 @@ const eliminarCita = async (req, res) => {
   }
 };
 
-module.exports = { addCita, getCitas, modificarCita, getCitasId, eliminarCita };
-
-
-
+module.exports = { addCita, getCitas, modificarCita, getCitasId, eliminarCita, getCitasByEmail };
