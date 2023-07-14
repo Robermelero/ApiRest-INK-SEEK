@@ -40,20 +40,20 @@ const getChats = async (req, res) => {
 
         let sql = "SELECT id_chat, name, photo, id_user2  FROM chat JOIN user ON (chat.id_user2 = user.id_user) JOIN photo ON(user.id_photo = photo.id_photo) WHERE id_user1 = ?"
 
-        console.log(sql);
+        
         
 
        
 
         let [resultUser1] = await Pool.query(sql, params);
 
-        console.log(resultUser1)
+        
 
         sql = "SELECT id_chat, name, photo  FROM chat JOIN user ON (chat.id_user1 = user.id_user) JOIN photo ON(user.id_photo = photo.id_photo) WHERE id_user2 = ?"
 
         let [resultUser2] = await Pool.query(sql, params);
 
-        console.log(resultUser2);
+        
 
         respuesta = {
             error: false, codigo: 200, mensaje: "chats encontrados",
@@ -82,10 +82,9 @@ const getMensajes = async (req, res)=>{
         params =[
             req.params.id_chat
         ];
-        console.log(sql);
-        console.log(params)
+        
         let [result] = await Pool.query(sql , params)
-        console.log(result)
+        
 
         respuesta ={
             error : false, codigo : 200, mensaje :"Todos los mensajes obtends",
@@ -106,10 +105,10 @@ const getOneChat = async (req, res)=>{
         let sql = "SELECT id_chat, id_user1, id_user2 name, photo  FROM chat JOIN user ON (chat.id_user2 = user.id_user) JOIN photo ON(user.id_photo = photo.id_photo) WHERE name = ?"
 
         params = [req.params.name];   
-        console.log(sql);
+        
         
         let [result] = await Pool.query(sql, params)
-        console.log(result);
+        
 
 
 
@@ -118,7 +117,7 @@ const getOneChat = async (req, res)=>{
             error : false, codigo : 200, mensaje : "Chat encontrado",
             data_conversacion : result
         }
-        console.log(respuesta)
+        
         res.send(respuesta)
     }
     else{
@@ -171,10 +170,10 @@ const postMensaje = async (req, res) =>{
             req.body.id_chat
         ]
 
-        console.log(sql)
+        
 
         let [result] = await Pool.query(sql, params)
-        console.log(result)
+        
 
         
         respuesta ={
@@ -196,14 +195,14 @@ const deleteChat = async (req, res)=>{
 
         let sql = "DELETE FROM chat WHERE id_chat = ?"
 
-        console.log(sql);
+        
 
         params =[
             req.body.id_chat
         ];
 
         let [result] = await Pool.query(sql, params);
-        console.log(result);
+        
 
         respuesta = {
             error: false, codigo : 200, mensaje :"Borrado perro",

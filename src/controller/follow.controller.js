@@ -38,7 +38,6 @@ const postFollow = async (req, res) => {
 
     res.send(respuesta);
   } catch (err) {
-    console.error(err);
   }
 };
 
@@ -77,7 +76,6 @@ const postUnfollow = async (req, res) => {
 
     res.send(respuesta);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
@@ -96,10 +94,7 @@ const getcheckFollow = async (req, res) => {
 
 
     res.send(resCheck.length > 0);
-    console.log("api")
-    console.log(resCheck)
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 
