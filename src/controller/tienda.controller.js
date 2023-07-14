@@ -3,10 +3,10 @@ const {Pool} = require("../database")
 
 const getProducto = async (req, res)=>{
     try{
-        let params =[]
+        
         let sql = "SELECT name, photo, photo.id_photo, producto.id_producto FROM producto JOIN photo ON(producto.id_photo = photo.id_photo) WHERE photo.id_user = ?";
-         params =[
-            req.params.id_user,
+        let params =[
+            req.query.id_user,
         ]
         
         console.log(sql);
