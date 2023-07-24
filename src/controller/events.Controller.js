@@ -1,6 +1,6 @@
 const { Pool } = require("../database");
 
-const postEvent=async(req,res)=>{
+    const postEvent=async(req,res)=>{
     const id_user=req.params.id_user;
     const {photo,title,fecha_inicio,fecha_final,place}=req.body; 
     try{
@@ -27,6 +27,7 @@ const postEvent=async(req,res)=>{
         console.log("error al añadir evento");
     }
 }
+
 
 const deleteEvent = async (req, res) => {
     const { id_evento } = req.params;

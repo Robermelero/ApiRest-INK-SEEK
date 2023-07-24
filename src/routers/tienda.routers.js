@@ -10,6 +10,6 @@ router.get("/tiendas", tiendaCtrl.getProducto);
 
 router.post("/tienda", tiendaCtrl.postProducto)
 
-router.delete("/tienda", tiendaCtrl.deleteProducto)
+router.delete("/tienda/:id_producto", tiendaCtrl.deleteProducto);
 
 module.exports = router
