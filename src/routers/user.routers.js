@@ -13,6 +13,8 @@ router.delete('/profile-tatuador-propia', userCtrl.deletePublicacion);
 
 router.post('/estrellas', userCtrl.postOpinion);
 router.get('/opiniones/:receptor', userCtrl.getOpiniones);
+router.put('/opiniones/:id_opiniones', userCtrl.postRespuestaOpinion);
+router.get('/profile-tatuador-externa/:receptor', userCtrl.calcularPuntuacionMedia);
 
 
 router.delete('/estrellas/:id_opiniones', userCtrl.borrarOpinion);
