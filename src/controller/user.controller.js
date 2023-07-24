@@ -305,14 +305,11 @@ const postOpinion = async (request, response) => {
 };
 
 //esto lo hago para mostrar las opiniones en la vista tatuador
-
 const getOpiniones = async (request, response) => {
   try {
     let respuesta;
     let params = []
-    // let sql = "SELECT * FROM opiniones WHERE receptor = '"+ request.body.receptor +"'";
-    // let sql = "SELECT * FROM opiniones";
-    let sql = "SELECT id_opiniones, emisor, receptor, comentario, puntuacion, photo, name FROM opiniones JOIN user ON (opiniones.emisor = user.id_user) JOIN photo ON (user.id_photo = photo.id_photo) WHERE receptor = ?"
+    let sql = "SELECT id_opiniones, emisor, receptor, comentario, puntuacion, respuestaTatuador, photo, name FROM opiniones JOIN user ON (opiniones.emisor = user.id_user) JOIN photo ON (user.id_photo = photo.id_photo) WHERE receptor = ?"
 console.log(sql);
     params = [request.params.receptor]
     let [result] = await Pool.query(sql, params);
@@ -333,7 +330,6 @@ console.log(respuesta);
 };
 
 //para borrar opinion que escribe el usuario
-
 const borrarOpinion = async (request, response) => {
   try{
     console.log(request.body);
@@ -361,8 +357,61 @@ const borrarOpinion = async (request, response) => {
   }
 }
 
+//para que el tatuador pueda responder a las opiniones
+const postRespuestaOpinion = async (request, response) => {
+  try {
+    let params = [];
+    let sql =
+      "UPDATE opiniones SET respuestaTatuador = ? WHERE id_opiniones = ?";
+    params = [
+      request.body.respuestaTatuador,
+      request.params.id_opiniones,
+    ];
+
+    const [result] = await Pool.query(sql, params);
+
+    const respuesta = {
+      error: false,
+      codigo: 200,
+      mensaje: "Respuesta enviada correctamente",
+      data_respuesta: result,
+    };
+
+    response.send(respuesta);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({
+      error: true,
+      mensaje: "Error al enviar la respuesta",
+    });
+  }
+};
+
+//para calcular la media con estrellas en el perfil propio/externo
+const calcularPuntuacionMedia = async (request, response) => {
+  try {
+    const sql = "SELECT AVG(puntuacion) AS puntuacion_media FROM opiniones WHERE receptor = ?";
+    const [result] = await Pool.query(sql);
+
+    const puntuacionMedia = result[0].puntuacion_media || 0;
+
+    const respuesta = {
+      error: false,
+      codigo: 200,
+      mensaje: "Puntuación media calculada correctamente",
+      puntuacion_media: puntuacionMedia,
+    };
+
+    response.send(respuesta);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({
+      error: true,
+      mensaje: "Error al calcular la puntuación media",
+    });
+  }
+};
 
 
 
-
-module.exports = { postRegister, postLogin, getUserTatuadorInfo, deletePublicacion, postOpinion, getOpiniones, borrarOpinion, obtenerIdUsuario, editProfile, getTatuadoresExplora, getArtistaInfo, getTatuador };
+module.exports = { postRegister, postLogin, getUserTatuadorInfo, deletePublicacion, postOpinion, getOpiniones, borrarOpinion, obtenerIdUsuario, editProfile, getTatuadoresExplora, getArtistaInfo, getTatuador, postRespuestaOpinion, calcularPuntuacionMedia};
