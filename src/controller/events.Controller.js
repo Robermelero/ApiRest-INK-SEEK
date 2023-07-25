@@ -16,13 +16,13 @@ const postEvent=async(req,res)=>{
         await Pool.query(`
         INSERT INTO evento(id_photo,title,fecha_inicio,fecha_final,place,id_user) 
         VALUES (LAST_INSERT_ID(),?,?,?,?,?) `,
-        [title,fecha_inicio,fecha_final,place,id_user])
+        [title,fecha_inicio,fecha_final,place,id_user]);
        respuesta={error:false, 
         codigo:200, mensaje:
-        "Evento añadido"}
+        "Evento añadido"};
         res.send(respuesta);
     }catch(error){
-        respuesta= {error:true, codigo:200, mensaje:"error al añadir evento",error}
+        respuesta= {error:true, codigo:200, mensaje:"error al añadir evento",error};
         res.send(respuesta);
         console.log("error al añadir evento");
     }
@@ -34,7 +34,7 @@ const deleteEvent = async (req, res) => {
     try {
       const IdDeLaMaravillosaTablaFotos= await Pool.query(`
       SELECT * FROM evento
-      WHERE id_evento=?`,[id_evento])
+      WHERE id_evento=?`,[id_evento]);
       const id_photo=IdDeLaMaravillosaTablaFotos.id_photo;
       await Pool.query('DELETE FROM evento WHERE id_evento = ?', [id_evento]);
       await Pool.query('DELETE FROM photo WHERE id_photo = ?', [id_photo]);
@@ -59,8 +59,10 @@ const deleteEvent = async (req, res) => {
   const getEvents = async (req, res) => {
     try {
       const eventos = await Pool.query(`
-      SELECT evento.*, photo.photo As photo FROM evento 
-      LEFT JOIN photo ON evento.Id_photo=photo.id_photo`);
+      SELECT evento.*, photo.photo AS photo 
+      FROM evento 
+      LEFT JOIN photo ON evento.Id_photo = photo.id_photo
+      ORDER BY evento.fecha_inicio ASC`);
       
   
       const respuesta = {
