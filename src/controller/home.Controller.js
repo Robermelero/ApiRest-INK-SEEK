@@ -14,7 +14,8 @@ const homeGetPhotos = async (req, res) => {
       SELECT f.id_follower
       FROM follow f
       WHERE f.id_user= ?
-    ) AND p.es_publicacion = 1
+      ) AND p.es_publicacion = 1
+      ORDER BY p.id_photo DESC
       `,[id_user]);
       const respuesta = {
         error: false,
@@ -48,6 +49,7 @@ const homeGetPhotos = async (req, res) => {
         INNER JOIN user u ON p.id_user = u.id_user
         INNER JOIN follow f ON u.id_user = f.id_follower
         WHERE (u.nickname LIKE ? OR u.name LIKE ? OR u.style LIKE ?) AND f.id_user = ? AND p.es_publicacion = 1
+        ORDER BY p.id_photo DESC
         `, [`%${search}%`, `%${search}%`,`%${search}%`, id_user]);
 
 
