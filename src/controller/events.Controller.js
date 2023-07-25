@@ -94,7 +94,8 @@ const deleteEvent = async (req, res) => {
         `SELECT evento.*, photo.photo AS photo FROM evento
         LEFT JOIN photo ON evento.id_photo = photo.id_photo
         INNER JOIN user ON evento.id_user = user.id_user
-        WHERE evento.title LIKE ? OR user.name LIKE ?`,
+        WHERE evento.title LIKE ? OR user.name LIKE ?
+        ORDER BY evento.fecha_inicio ASC`,
         [`%${search}%`, `%${search}%`]
       );
   
