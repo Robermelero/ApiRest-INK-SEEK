@@ -370,13 +370,16 @@ const postRespuestaOpinion = async (request, response) => {
   }
 };
 
-//para calcular la media con estrellas en el perfil propio/externo
-const calcularPuntuacionMedia = async (request, response) => {
+const calcularPuntuacionMedia = async (req, res) => {
+  
+  const id_user = req.params.id_user;
+  console.log(id_user)
   try {
     const sql = "SELECT AVG(puntuacion) AS puntuacion_media FROM opiniones WHERE receptor = ?";
-    const [result] = await Pool.query(sql);
-
+    const [result] = await Pool.query(sql, [id_user]);
     const puntuacionMedia = result[0].puntuacion_media || 0;
+    console.log(result)
+    console.log(puntuacionMedia)
 
     const respuesta = {
       error: false,
@@ -385,15 +388,18 @@ const calcularPuntuacionMedia = async (request, response) => {
       puntuacion_media: puntuacionMedia,
     };
 
-    response.send(respuesta);
+    res.json(respuesta);
   } catch (error) {
     console.error(error);
-    response.status(500).json({
+    res.status(500).json({
       error: true,
       mensaje: "Error al calcular la puntuación media",
     });
   }
 };
+
+
+
 
 
 
